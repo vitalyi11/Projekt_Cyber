@@ -1,32 +1,51 @@
 Cyberbezpieczeństwo Projekt - Narzędzie diagnostyczne sieci
 
-Narzędzie diagnostyczne sieci (Network Diagnostic Tool)
-This application provides a graphical interface for various network diagnostic tools, allowing users to monitor WiFi networks, trace network routes, and view active network connections.
+Narzędzie diagnostyczne sieci
+Ta aplikacja udostępnia graficzny interfejs dla różnych narzędzi diagnostycznych sieci, umożliwiając użytkownikom monitorowanie sieci WiFi, śledzenie tras sieciowych oraz przeglądanie aktywnych połączeń sieciowych.
 
-Features
-WiFi Scanner
-Scans and displays available WiFi networks in your area
-Shows detailed information including:
-SSID (network name)
-Channel number
-Frequency (2.4 GHz or 5 GHz)
-Signal strength (in dBm)
-Automatically refreshes every 10 seconds
-Supports manual scanning with a button click
+Funkcje
+Skaner WiFi
+Skanuje i wyświetla dostępne sieci WiFi w twojej okolicy
+Pokazuje szczegółowe informacje, w tym:
+SSID (nazwa sieci)
+Numer kanału
+Częstotliwość (2.4 GHz lub 5 GHz)
+Siła sygnału (w dBm)
+Automatycznie odświeża co 10 sekund
+Wspiera ręczne skanowanie po kliknięciu przycisku
 Traceroute
-Traces the route packets take to a specified network destination
-Shows each hop along the network path
-Compatible with Windows, Linux, and macOS platforms
-Displays results in real-time
+Śledzi trasę, którą pakiety pokonują do określonego celu sieciowego
+Pokazuje każdy przeskok na ścieżce sieciowej
+Kompatybilny z platformami Windows, Linux i macOS
+Wyświetla wyniki w czasie rzeczywistym
 Netstat
-Displays active network connections on your system
-Shows listening ports and established connections
-Adapts commands based on your operating system
-Outputs detailed network statistics
-Requirements
+Wyświetla aktywne połączenia sieciowe w systemie
+Pokazuje nasłuchujące porty i ustanowione połączenia
+Dostosowuje komendy w zależności od systemu operacyjnego
+Generuje szczegółowe statystyki sieciowe
+Wymagania
 Python 3.x
 PyQt5
-Operating system support for native network commands:
+Wsparcie systemu operacyjnego dla natywnych komend sieciowych:
 Windows: netsh, tracert, netstat
-Linux: traceroute, netstat or ss
+Linux: traceroute, netstat lub ss
 macOS: traceroute, netstat
+
+Użytkowanie
+Skaner WiFi
+Zakładka skanera WiFi wyświetla tabelę dostępnych sieci. Kliknij "Skanuj sieci WiFi", aby ręcznie odświeżyć listę.
+
+Traceroute
+Wprowadź adres docelowy (np. google.com, 8.8.8.8)
+Kliknij "Uruchom Traceroute" lub naciśnij Enter
+Zobacz informacje o trasie w oknie wyjściowym
+Netstat
+Kliknij "Wyświetl Netstat", aby zobaczyć aktualne informacje o połączeniach sieciowych.
+
+Szczegóły techniczne
+Aplikacja wykorzystuje:
+
+PyQt5 do interfejsu użytkownika
+QProcess do asynchronicznego wykonywania poleceń
+Komendy specyficzne dla danej platformy do diagnostyki sieci
+Wyrażenia regularne do analizy wyjścia komend
