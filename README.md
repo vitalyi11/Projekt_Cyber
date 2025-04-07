@@ -7,9 +7,9 @@ Aplikacja graficzna do diagnostyki i analizy sieci lokalnej, napisana w Pythonie
 
 ## 🖼️ Zrzuty ekranu
 
-![WiFi Scanner](https://via.placeholder.com/800x400?text=Zrzut+ekranu+Skanera+WiFi)
-![Traceroute](https://via.placeholder.com/800x400?text=Zrzut+ekranu+Traceroute)
-![Netstat](https://via.placeholder.com/800x400?text=Zrzut+ekranu+Netstat)
+![WiFi Scanner](screenshots/skanowanie%20sieci.JPG)
+![Traceroute](screenshots/traceroute.JPG)
+![Netstat](screenshots/netstat.JPG)
 
 ## 🛠️ Funkcje
 
