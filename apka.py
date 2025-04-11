@@ -2,13 +2,16 @@ import sys
 import subprocess
 import platform
 import re
+import os
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem, QPushButton, QVBoxLayout, QWidget, QTabWidget, QTextEdit, QLineEdit, QLabel
 from PyQt5.QtCore import Qt, QTimer, QProcess
+from PyQt5.QtGui import QIcon
 
 class WifiScanner(QMainWindow):
     def __init__(self):
         super().__init__()
 
+        self.setWindowIcon(QIcon('icon.png'))
         self.setWindowTitle("Narzędzia sieci")
         self.setGeometry(100, 100, 800, 600)
 
@@ -195,7 +198,6 @@ class WifiScanner(QMainWindow):
         self.netstat_output.append("Running netstat...\n")
         command = ["netstat", "-a", "-n", "-o"]
         self.process.start(command[0], command[1:])
-
 
     def handle_output(self):
         if self.current_tab == "traceroute":
