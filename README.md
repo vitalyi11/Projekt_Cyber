@@ -11,6 +11,7 @@ Aplikacja graficzna do diagnostyki i analizy sieci lokalnej, napisana w Pythonie
 ![WiFi Scanner](screenshots/skanowanie%20sieci.JPG)
 ![Traceroute](screenshots/traceroute.JPG)
 ![Netstat](screenshots/netstat.JPG)
+![Ping](screenshots/ping.JPG)
 
 ## 🛠️ Funkcje
 
