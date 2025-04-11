@@ -33,7 +33,7 @@ Aplikacja graficzna do diagnostyki i analizy sieci lokalnej, napisana w Pythonie
 - Pokazuje aktywne połączenia sieciowe.
 - Dostosowane polecenia w zależności od systemu operacyjnego (`netstat`, `ss`).
 
-## 🧰 Wymagania
+### 🧰 Wymagania
 
 - Python 3.6+
 - PyQt5
