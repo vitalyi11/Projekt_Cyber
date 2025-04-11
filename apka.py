@@ -40,7 +40,6 @@ class WifiScanner(QMainWindow):
         self.timer.timeout.connect(self.scan_wifi)
         self.timer.start(10000)
 
-        # Zakładka Traceroute
         self.traceroute_tab = QWidget()
         self.tab_widget.addTab(self.traceroute_tab, "Traceroute")
         self.traceroute_layout = QVBoxLayout(self.traceroute_tab)
@@ -49,7 +48,7 @@ class WifiScanner(QMainWindow):
         self.traceroute_layout.addWidget(self.traceroute_label)
 
         self.traceroute_input = QLineEdit()
-        self.traceroute_input.returnPressed.connect(self.run_traceroute)  # Uruchom po wciśnięciu Enter
+        self.traceroute_input.returnPressed.connect(self.run_traceroute)
         self.traceroute_layout.addWidget(self.traceroute_input)
 
         self.traceroute_button = QPushButton("Uruchom Traceroute")
@@ -60,8 +59,25 @@ class WifiScanner(QMainWindow):
         self.traceroute_output.setReadOnly(True)
         self.traceroute_layout.addWidget(self.traceroute_output)
 
+        self.ping_tab = QWidget()
+        self.tab_widget.addTab(self.ping_tab, "Ping")
+        self.ping_layout = QVBoxLayout(self.ping_tab)
 
-        # Zakładka Netstat
+        self.ping_label = QLabel("Adres docelowy:")
+        self.ping_layout.addWidget(self.ping_label)
+
+        self.ping_input = QLineEdit()
+        self.ping_input.returnPressed.connect(self.run_ping)
+        self.ping_layout.addWidget(self.ping_input)
+
+        self.ping_button = QPushButton("Uruchom Ping")
+        self.ping_button.clicked.connect(self.run_ping)
+        self.ping_layout.addWidget(self.ping_button)
+
+        self.ping_output = QTextEdit()
+        self.ping_output.setReadOnly(True)
+        self.ping_layout.addWidget(self.ping_output)
+
         self.netstat_tab = QWidget()
         self.tab_widget.addTab(self.netstat_tab, "Netstat")
         self.netstat_layout = QVBoxLayout(self.netstat_tab)
@@ -74,17 +90,16 @@ class WifiScanner(QMainWindow):
         self.netstat_output.setReadOnly(True)
         self.netstat_layout.addWidget(self.netstat_output)
         
-        # QProcess dla asynchronicznego wykonywania poleceń
         self.process = QProcess()
         self.process.readyReadStandardOutput.connect(self.handle_output)
         self.process.readyReadStandardError.connect(self.handle_error)
         self.process.finished.connect(self.process_finished)
-        self.current_tab = ""  # Przechowuje informację o aktywnej zakładce
+        self.current_tab = ""
 
 
 
     def scan_wifi(self):
-        self.current_tab = "wifi"  # Ustaw aktywną zakładkę
+        self.current_tab = "wifi" 
         self.wifi_table.setRowCount(0)
         networks = self.get_wifi_networks()
 
@@ -101,7 +116,6 @@ class WifiScanner(QMainWindow):
 
         try:
             if os_name == "Windows":
-                # Use mode=Bssid to get detailed information including channel and signal strength
                 output = subprocess.check_output(["netsh", "wlan", "show", "networks", "mode=Bssid"], encoding='utf-8', errors='ignore')
                 
                 current_ssid = None
@@ -110,9 +124,7 @@ class WifiScanner(QMainWindow):
                 for line in output.split('\n'):
                     line = line.strip()
                     
-                    # SSID line indicates start of a new network
                     if "SSID" in line and "BSSID" not in line:
-                        # Save previous network if exists
                         if current_ssid:
                             networks.append([
                                 current_ssid,
@@ -121,34 +133,28 @@ class WifiScanner(QMainWindow):
                                 current_data["signal"]
                             ])
                         
-                        # Start new network
                         ssid_match = re.search(r'SSID \d+ : (.+)', line)
                         if ssid_match:
                             current_ssid = ssid_match.group(1).strip()
                             current_data = {"channel": "N/A", "frequency": "N/A", "signal": "N/A"}
-                    
-                    # Extract channel
+
                     if "Channel" in line or "Kanał" in line:
                         channel_match = re.search(r': (\d+)', line)
                         if channel_match:
                             channel = channel_match.group(1)
                             current_data["channel"] = channel
-                            # Set frequency based on channel
                             if int(channel) <= 14:
                                 current_data["frequency"] = "2.4"
                             else:
                                 current_data["frequency"] = "5"
                     
-                    # Extract signal
                     if "Signal" in line or "Sygnał" in line:
                         signal_match = re.search(r': (\d+)%', line)
                         if signal_match:
                             signal_percent = int(signal_match.group(1))
-                            # Convert percentage to dBm
                             signal_dbm = -100 + (signal_percent / 2)
                             current_data["signal"] = f"{int(signal_dbm)}"
                 
-                # Add the last network
                 if current_ssid:
                     networks.append([
                         current_ssid,
@@ -162,39 +168,32 @@ class WifiScanner(QMainWindow):
         return networks   
 
     def run_traceroute(self):
-        self.current_tab = "traceroute" # Ustaw aktywną zakładkę
+        self.current_tab = "traceroute"
         target = self.traceroute_input.text()
         if not target:
             return
 
         self.traceroute_output.clear()
         self.traceroute_output.append(f"Tracing route to {target}...\n")
+        command = ["tracert", target]
+        self.process.start(command[0], command[1:])
 
-        if platform.system() == "Windows":
-            command = ["tracert", target]
-        elif platform.system() == "Linux" or platform.system() == "Darwin":
-            command = ["traceroute", target]
-        else:
-            self.traceroute_output.append("Nieobsługiwany system operacyjny.")
+    def run_ping(self):
+        self.current_tab = "ping"
+        target = self.ping_input.text()
+        if not target:
             return
-        
+
+        self.ping_output.clear()
+        self.ping_output.append(f"Ping do {target}...\n")
+        command = ["ping", target]
         self.process.start(command[0], command[1:])
 
     def run_netstat(self):
-        self.current_tab = "netstat" # Ustaw aktywną zakładkę
+        self.current_tab = "netstat"
         self.netstat_output.clear()
         self.netstat_output.append("Running netstat...\n")
-
-        if platform.system() == "Windows":
-            command = ["netstat", "-a", "-n", "-o"]
-        elif platform.system() == "Linux":
-            command = ["netstat", "-tulpn"]  # lub ss -tulpn
-        elif platform.system() == "Darwin":
-            command = ["netstat", "-v", "-n"]
-        else:
-            self.netstat_output.append("Nieobsługiwany system operacyjny.")
-            return
-
+        command = ["netstat", "-a", "-n", "-o"]
         self.process.start(command[0], command[1:])
 
 
@@ -205,6 +204,9 @@ class WifiScanner(QMainWindow):
         elif self.current_tab == "netstat":
             data = self.process.readAllStandardOutput().data().decode(errors='ignore')
             self.netstat_output.append(data)
+        elif self.current_tab == "ping":
+            data = self.process.readAllStandardOutput().data().decode(errors='ignore')
+            self.ping_output.append(data)
             
 
     def handle_error(self):
@@ -214,12 +216,17 @@ class WifiScanner(QMainWindow):
          elif self.current_tab == "netstat":
             data = self.process.readAllStandardError().data().decode(errors='ignore')
             self.netstat_output.append(data)
+         elif self.current_tab == "ping":
+            data = self.process.readAllStandardError().data().decode(errors='ignore')
+            self.ping_output.append(data)
 
     def process_finished(self):
         if self.current_tab == "traceroute":
             self.traceroute_output.append("Traceroute completed.")
         elif self.current_tab == "netstat":
             self.netstat_output.append("Netstat completed.")
+        elif self.current_tab == "ping":
+            self.ping_output.append("Ping completed.")
 
 
 if __name__ == "__main__":
