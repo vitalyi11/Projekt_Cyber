@@ -3,6 +3,7 @@
 Aplikacja graficzna do diagnostyki i analizy sieci lokalnej, napisana w Pythonie z wykorzystaniem PyQt5. Umożliwia:
 - skanowanie sieci WiFi,
 - wykonywanie polecenia traceroute,
+- wykonywanie poleceń ping,
 - przeglądanie aktywnych połączeń przez `netstat`.
 
 ## 🖼️ Zrzuty ekranu
@@ -21,6 +22,11 @@ Aplikacja graficzna do diagnostyki i analizy sieci lokalnej, napisana w Pythonie
 ### 🌐 Traceroute
 - Umożliwia śledzenie trasy pakietów do wybranego hosta.
 - Wspiera `tracert` (Windows) oraz `traceroute` (Linux/macOS).
+
+### 🔄 Ping
+- Umożliwia sprawdzenie dostępności i opóźnienia połączenia do hosta.
+- Łatwe testowanie responsywności serwerów i urządzeń sieciowych.
+- Wspiera standardowe polecenie `ping` dostępne na wszystkich platformach.
 
 ### 📡 Netstat
 - Pokazuje aktywne połączenia sieciowe.
