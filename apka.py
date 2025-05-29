@@ -178,7 +178,7 @@ class WifiScanner(QMainWindow):
 
         self.traceroute_output.clear()
         self.traceroute_output.append(f"Tracing route to {target}...\n")
-        command = ["tracert", target]
+        command = ["tracert", "-d", "-h", "30", "-w", "100", target]
         self.process.start(command[0], command[1:])
 
     def run_ping(self):
